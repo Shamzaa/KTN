@@ -1,0 +1,82 @@
+<Project>
+  <Name>ktn1</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>class diagram server</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Server</Name>
+        <Access>Public</Access>
+        <Location left="77" top="42" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">list Clients</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ThreadedTCPServer</Name>
+        <Access>Public</Access>
+        <Location left="332" top="42" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">private void start()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ClientHandler</Name>
+        <Access>Public</Access>
+        <Location left="114" top="378" />
+        <Size width="195" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">list client_address</Member>
+        <Member type="Field">string client_name</Member>
+        <Member type="Field">list client_messages</Member>
+        <Member type="Method">public void handle()</Member>
+        <Member type="Method">private string getConnectedUsers()</Member>
+        <Member type="Method">private void disconnectUser()</Member>
+        <Member type="Method">public string __str__()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>init</Text>
+        <Location left="260" top="84" />
+        <Size width="50" height="50" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Creates new ClientHandler object for each new client connection</Text>
+        <Location left="423" top="287" />
+        <Size width="160" height="75" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Uses list of clients to get toString method
+</Text>
+        <Location left="11" top="287" />
+        <Size width="150" height="62" />
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Dependency" first="2" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="1" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
