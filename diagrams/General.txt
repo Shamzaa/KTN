@@ -1,0 +1,187 @@
+title General Sequence Diagram
+participant Client
+participant messageParser
+participant messageReceiver
+participant clientHandler
+participant ThreadedTCPServer
+ThreadedTCPServer->+ThreadedTCPServer: __init__()
+Client->+Client: __init__()
+note right of Client: Create socket
+Client->Client: run()
+Client->+ThreadedTCPServer: connect()
+activate Client
+ThreadedTCPServer->-*clientHandler: start()
+Client->*messageReceiver: start()
+messageReceiver->+messageReceiver: __init__()
+clientHandler->+clientHandler: handle() 
+Client->Client: input(">> ")
+note left of Client: Get input from user
+Client->Client: create JSON as request
+Client->+clientHandler: send_payload(request)
+alt request: login
+    note left of clientHandler
+    request: {
+        "request": "login",
+        "content": <username>
+    }
+    end note
+    loop for i in users
+        clientHandler->clientHandler: hasUserName(i,<username>)
+    end loop
+    alt taken
+        clientHandler->clientHandler: create error message
+        note left of clientHandler
+            response: {
+                "response": "error",
+                "content": "Username taken username",
+                "sender": "Server"
+            }
+        end note
+    end alt
+    alt not taken
+        clientHandler->clientHandler: create user
+        clientHandler->clientHandler: sendToAllUsers(...)
+        note left of clientHandler
+            response: {
+                "response": "info",
+                "content": "Successfully logged in",
+                "sender": "Server"
+            }
+            Will alos send info ot the other users that a user has logged in
+        end note
+        clientHandler->clientHandler: fetch history
+        clientHandler->+messageReceiver: send_response(message history)
+        messageReceiver->+Client: receiver_message(message_history)
+        deactivate messageReceiver
+        Client->+messageParser: parse(message_history)
+        deactivate Client
+        loop for r in content
+            messageParser->messageParser: parse(r)
+        end loop
+        messageParser->Client: output
+        deactivate messageParser
+        Client->Client: print(output)
+    end alt
+end alt
+alt request: help
+    note left of clientHandler
+    request: {
+        "request": "help",
+        "content": null
+    }
+    end note
+    clientHandler->clientHandler: create help respons
+    note left of clientHandler
+        response: {
+            "response": "info",
+            "content": "...",
+            "sender": "Server"
+        }
+        end note
+    
+end alt
+alt request: logout, msg or names
+    clientHandler->clientHandler: isLoggedIn()
+    alt not logged in
+        clientHandler->clientHandler: create error message
+        note left of clientHandler
+            response: {
+            "response": "error",
+            "content": "You have to be logged in to use that command",
+            "sender": "Server"
+            }
+        end note
+    end alt
+    alt logged in
+        alt request: logout
+            note left of clientHandler
+                request: {
+                    "request": "logout",
+                    "content": null
+                }
+            end note
+            clientHandler->clientHandler: logout()
+            note left of clientHandler
+                respose: {
+                    "response": "info",
+                    "content": "Successfully logged out",
+                    "sender": "Server"
+                }
+                Will also send info to ther other users
+                that a user has logged out
+            end note
+        end alt
+        alt request: msg
+            note left of clientHandler
+                request: {
+                    "request": "msg",
+                    "content": <message>
+                }
+            end note
+            note left of clientHandler
+                respose: {
+                    "response": "message",
+                    "content": <message>,
+                    "sender": <user>
+                }
+                Response is sendt to all users
+            end note
+            clientHandler->clientHandler: sendToAllUsers(respons)
+        end alt
+        alt request: names
+            note left of clientHandler
+                request: {
+                    "request": "names",
+                    "content": null
+                }
+            
+            end note
+            loop for u in users
+                clientHandler->clientHandler: response.append(u)    
+            end loop
+            note left of clientHandler
+                response:{
+                    "response": "info",
+                    "content": 
+                    "Users on server:\\n
+                    1. user_1\\n
+                    2. user_2\\n
+                    3. ..."
+                    "sender": "Server"
+                }
+            end note
+        
+        end alt
+    end alt
+end alt
+clientHandler->+messageReceiver: send_response(response)
+deactivate clientHandler
+messageReceiver->-Client: receive_message(response)
+activate Client
+Client->+messageParser: parse(response)
+note left of messageParser
+    General sequence,
+    Choose parsing method
+    based on response type
+end note
+alt respone: error
+    messageParser->messageParser: parse_error(response)
+end alt
+alt respone: info
+    messageParser->messageParser: parse_info(response)
+end alt
+alt respone: message
+    messageParser->messageParser: parse_message(response)
+end alt
+alt respone: history
+    loop for r in content
+        messageParser->messageParser: parse(r)
+    end loop
+end alt
+messageParser->messageParser: output
+messageParser->-Client: output
+deactivate Client
+Client->Client: print(output)
+
+
+
