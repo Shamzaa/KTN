@@ -58,7 +58,8 @@ alt request: login
         loop for r in content
             messageParser->messageParser: parse(r)
         end loop
-        messageParser->Client: output
+        messageParser->messageParser: output
+        messageParser-->Client: output
         deactivate messageParser
         Client->Client: print(output)
     end alt
@@ -179,7 +180,7 @@ alt respone: history
     end loop
 end alt
 messageParser->messageParser: output
-messageParser->-Client: output
+messageParser-->-Client: output
 deactivate Client
 Client->Client: print(output)
 
