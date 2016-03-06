@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import SocketServer
+import socketserver
 
 """
 Variables and functions that must be used by all the ClientHandler objects
 must be written here (e.g. a dictionary for connected clients)
 """
-clients = [];
 
-class ClientHandler(SocketServer.BaseRequestHandler):
+class ClientHandler(socketserver.BaseRequestHandler):
     """
     This is the ClientHandler class. Everytime a new client connects to the
     server, a new ClientHandler object will be created. This class represents
@@ -19,22 +18,35 @@ class ClientHandler(SocketServer.BaseRequestHandler):
         """
         This method handles the connection between a client and the server.
         """
-        self.ip = self.client_address[0]
-        self.port = self.client_address[1]
-        self.connection = self.request
+        self.ip = self.client_address[0];
+        self.port = self.client_address[1];
+        self.connection = self.request;
+        
+        
         print("New client connected!");
-        clients.append(self);
         
         # Loop that listens for messages from the client
         while True:
-            received_string = self.connection.recv(4096)
-            
-            # TODO: Add handling of received payload from client
-        
+            try:
+                received_string = self.connection.recv(4096);
+                print("Got request: {}".format(received_string.decode("UTF-8")));
+                # TODO: Add handling of received payload from client
+            except Exception as e:
+                print("Exception cought: {}\nTerminating connection!".format(e));
+                
+                break;
         # Clean up
-        clients.remove(self)
+        self.connection.close();
         
-class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+    def sendToUser(user,data):
+        pass;
+        user.send(data);
+    
+    
+    
+    
+    
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
     This class is present so that each client connected will be ran as a own
     thread. In that way, all clients will be served by the server.
@@ -50,9 +62,9 @@ if __name__ == "__main__":
 
     No alterations are necessary
     """
-    HOST, PORT = 'localhost', 9998
-    print 'Server running...'
+    HOST, PORT = ('localhost', 9998);
+    print("Server running...2");
 
     # Set up and initiate the TCP server
-    server = ThreadedTCPServer((HOST, PORT), ClientHandler)
-    server.serve_forever()
+    server = ThreadedTCPServer((HOST, PORT), ClientHandler);
+    server.serve_forever();
