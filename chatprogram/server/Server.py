@@ -21,7 +21,7 @@ class ClientHandler(socketserver.BaseRequestHandler):
         self.ip = self.client_address[0];
         self.port = self.client_address[1];
         self.connection = self.request;
-        
+        self.loggedIn 
         
         print("New client connected!");
         

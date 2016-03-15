@@ -1,0 +1,36 @@
+title logout
+
+participant Client
+participant MessageParse
+participant MessageReceiver
+participant ClientHandler
+note left of Client: 
+Client sender
+JSON objekter
+end note
+
+Client->+ClientHandler: JSON object med logout
+alt success
+note right of ClientHandler: 
+Dekoder JSON fil og fjerner
+bruker fra dictionary
+end note
+ClientHandler->ClientHandler:
+note right of ClientHandler
+Returnerer et JSON objekt
+med logout confirmd
+end note
+ClientHandler-->+MessageReceiver: response JSON
+MessageReceiver-->+Client: Response JSON
+Client->+MessageParse: parse()
+note right of MessageParse:
+Dekoder JSON og returnere
+"logoutSuccessfull" som en
+streng til klient
+end note
+MessageParse->-Client: string
+deactivate MessageReceiver
+deactivate Client
+
+
+

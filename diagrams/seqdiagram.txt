@@ -33,7 +33,7 @@ alt request: login
         note left of clientHandler
             response: {
                 "response": "error",
-                "content": "Username taken username",
+                "content": "Username taken <username>",
                 "sender": "Server"
             }
         end note
@@ -47,7 +47,7 @@ alt request: login
                 "content": "Successfully logged in",
                 "sender": "Server"
             }
-            Will alos send info ot the other users that a user has logged in
+            Will alos send info to the other users that a user has logged in
         end note
         clientHandler->clientHandler: fetch history
         clientHandler->+messageReceiver: send_response(message history)

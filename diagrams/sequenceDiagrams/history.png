@@ -1,0 +1,30 @@
+title Sequence Diagram
+
+participant Client
+participant MessageParse
+participant MessageReceiver
+participant ClientHandler
+
+
+Client->Client: run()
+Client->ThreadedTCPServer: connect()
+ThreadedTCPServer->clientHandler: start()
+Client->messageReceiver: start()
+clientHandler->clientHandler: handle() 
+Client->Client: input(">> ")
+note left of Client: Get input from user
+Client->Client: create JSON as request
+Client->clientHandler: send_payload(request)
+clientHandler->clientHandler: handle request
+note right of clientHandler: Do a login check
+clientHandler->messageReceiver: send response
+messageReceiver->Client: receive_message(response)
+Client->messageParser: parse(response)
+note left of messageParser: Choose parsing method 
+note left of messageParser: based on response type 
+messageParser->messageParser: parse_xxx(response)
+messageParser->messageParser: output
+messageParser->Client: output
+Client->Client: print(output)
+
+

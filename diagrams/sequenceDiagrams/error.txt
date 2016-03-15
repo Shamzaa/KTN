@@ -1,0 +1,40 @@
+title error
+
+participant Client
+participant MessageParse
+participant MessageReceiver
+participant ClientHandler
+note left of Client: 
+Client sender
+JSON objekter
+end note
+
+Client->+ClientHandler: JSON object med ulovlig innhold/kommand
+note right of ClientHandler
+dekoder JSON fil og responderer
+med invalid kommando
+end note
+ClientHandler->ClientHandler:
+
+note right of ClientHandler:
+Returnerer en JSON fil med
+beskjed om ivalid kommando
+end note
+
+
+
+ClientHandler-->+MessageReceiver: response JSON
+MessageReceiver-->+Client: Response JSON
+Client->+MessageParse: parse()
+note right of MessageParse:
+Dekoder JSON og returnere
+en feilmelding til klienten
+som en streng
+end note
+MessageParse->-Client: string
+deactivate MessageReceiver
+deactivate Client
+
+
+
+

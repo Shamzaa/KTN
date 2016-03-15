@@ -8,9 +8,10 @@
         <Name>Server</Name>
         <Access>Public</Access>
         <Location left="79" top="42" />
-        <Size width="162" height="103" />
+        <Size width="162" height="111" />
         <Collapsed>False</Collapsed>
         <Member type="Field">dictionary Clients</Member>
+        <Member type="Field">list&lt;String&gt; history</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
@@ -26,11 +27,10 @@
         <Name>ClientHandler</Name>
         <Access>Public</Access>
         <Location left="188" top="326" />
-        <Size width="377" height="308" />
+        <Size width="377" height="264" />
         <Collapsed>False</Collapsed>
         <Member type="Field">String ip</Member>
         <Member type="Field">String port</Member>
-        <Member type="Field">list&lt;String&gt; history</Member>
         <Member type="Field">Socket connection</Member>
         <Member type="Method">public void __init__(ClientHandler self)</Member>
         <Member type="Method">public void handle(ClientHandler self)</Member>
@@ -49,18 +49,20 @@
       <Entity type="Comment">
         <Text>Creates new ClientHandler object for each new client connection</Text>
         <Location left="376" top="183" />
-        <Size width="160" height="75" />
+        <Size width="160" height="62" />
       </Entity>
       <Entity type="Comment">
         <Text>Uses list of clients to get information about other clients. Username as lookup and clientHandler object as the content of username
 
 </Text>
         <Location left="40" top="183" />
-        <Size width="150" height="114" />
+        <Size width="150" height="102" />
       </Entity>
     </Entities>
     <Relationships>
       <Relationship type="Dependency" first="2" second="0">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -69,6 +71,8 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Association" first="1" second="2">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -79,6 +83,8 @@
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="0" second="1">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
