@@ -103,7 +103,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         else:
             self.sendToUser(self.error("Du må logge in for å sende meldinger!"));
             
-    def names(self):
+    def names(self,a):
         self.sendToUser(self.info(clients.keys()));
     
     def message(self, message):
@@ -113,8 +113,8 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "sender": self.username
         };
     
-    def help(self):
-        self.sendToUser(info(self, commands));
+    def help(self,a):
+        self.sendToUser(self.info(commands));
     
     def error(self, message):
         # return error message
