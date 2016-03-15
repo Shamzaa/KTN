@@ -1,13 +1,28 @@
 # -*- coding: utf-8 -*-
 import socketserver
+import json
+import datetime
 
 """
 Variables and functions that must be used by all the ClientHandler objects
 must be written here (e.g. a dictionary for connected clients)
 """
+clients = {};
+history = [];
 
+commands = "Commands:\n\tlogin <username>\nl\togout\n\tmsg <message>\n\tnames\n\thelp";
+
+class parser():
+
+    def decodeReceived(self,received_string):
+        received_json = json.loads(received_string);
+        if(received_json["request"] in parse_tabel):
+            return self.parse_tabel[received_json["request"]](received_json["content"]);
+            
+    parse_tabel = {};
     
-class ClientHandler(socketserver.BaseRequestHandler):
+    
+class ClientHandler(socketserver.BaseRequestHandler,parser):
     """
     This is the ClientHandler class. Everytime a new client connects to the
     server, a new ClientHandler object will be created. This class represents
@@ -23,13 +38,16 @@ class ClientHandler(socketserver.BaseRequestHandler):
         self.port = self.client_address[1];
         self.connection = self.request;
         
+        self.username = None;
+        
         print("New client connected!");
         
         # Loop that listens for messages from the client
         while True:
             try:
-                received_string = self.connection.recv(4096);
-                print("Got request: {}".format(received_string.decode("UTF-8")));
+                received_string = self.connection.recv(4096).decode("UTF-8");
+                self.decodeReceived(received_string);
+                # print("Got request: {}".format(received_string.decode("UTF-8")));
                 # TODO: Add handling of received payload from client
             except Exception as e:
                 print("Exception cought: {}\nTerminating connection!".format(e));
@@ -38,12 +56,99 @@ class ClientHandler(socketserver.BaseRequestHandler):
         # Clean up
         self.connection.close();
         
-    def sendToUser(user,data):
+        
+    # variable data is dictionary
+    def sendToUser(user, data):
         pass;
-        user.send(data);
+        if not("timestamp" in data):
+            data["timestamp"] = datetime.datetime.now().time().replace(microseconds = 0);
+            
+        connection.send(json.dumps(data).encode("ASCII"));
+        # data is dict
+        # add server as sender
+        # add timestamp
+    
+
+    def sendToAllUsers(cls, data):
+        data["timestamp"] = datetime.datetime.now().time().replace(microseconds = 0);
+        history.append(data);
+        for k,v in clients.items():
+            v.sendToUser(data);
+            
+    def isLoggedIn(self):
+        return self.username in clients;
+        
+    def login(username):
+        if(isLoggedIn(self)):
+            self.error("du er allerede logget inn");
+            
+        if(not username in clients):
+            clients[username] = self;
+            self.username = username;
+            self.sendToUser(self.info("logget inn"));
+            ClientHandler.sendToAllUsers(self.info("{}  har logget in".format(username)));
+        else:
+            self.error("brukernavnet er tatt");
+        
+        
     
     
+    def logout(self, message):
+        if(isLoggedIn(self)):
+            clients.pop(self.username);
     
+    def msg(self,mess):
+        # ja, det er et mess
+        ClientHandler.sendToAllUsers(self.message(mess));
+        
+    def names(self):
+        self.sendToUser(self.info(clients.keys()));
+    
+    def message(self, message):
+        return {
+            "response": "message",
+            "content": message,
+            "sender": self.username
+        };
+    
+    def help(self):
+        self.sendToUser(info(self, commands));
+    
+    def error(self, message):
+        # return error message
+        return {
+            "response": "error",
+            "content": message,
+            "sender": "Server"
+        };
+        
+        
+    def info(self, message):
+        # 
+        return {
+            "response": "info",
+            "content": message,
+            "sender": "Server"
+        };
+        
+    def history(self):
+        return {
+            "response": "history",
+            "content": history,
+            "sender": "Server"
+        };
+    
+    parse_tabel = {
+        "login": login,
+        "logout": logout,
+        "help": help,
+        "msg": msg,
+        "names": names
+        
+    
+    }
+    
+
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
     This class is present so that each client connected will be ran as a own
