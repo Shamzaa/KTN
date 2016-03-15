@@ -21,7 +21,7 @@
         <Name>MessageReceiver</Name>
         <Access>Public</Access>
         <Location left="774" top="125" />
-        <Size width="407" height="183" />
+        <Size width="407" height="140" />
         <Collapsed>False</Collapsed>
         <Member type="Field">Thread thread</Member>
         <Member type="Method">public void __init__(MessageReceiver self, Client client, socket connection)</Member>
@@ -34,14 +34,12 @@
         <Location left="475" top="428" />
         <Size width="326" height="228" />
         <Collapsed>False</Collapsed>
-        <Member type="Field">json payload</Member>
         <Member type="Field">static dictionary&lt;String,Method&gt; responseTable</Member>
-        <Member type="Method">public void __init__(MessageParser self)</Member>
-        <Member type="Method">public void parse(MessageParser selv, json payload)</Member>
-        <Member type="Method">private void parse_error(MessageParser self, json payload)</Member>
-        <Member type="Method">private void parse_info(MessageParser self, json payload)</Member>
-        <Member type="Method">private void parse_history(MessageParser self, json payload)</Member>
-        <Member type="Method">private void parse_message(MessageParser self, json payload)</Member>
+        <Member type="Method">public static void parse(MessageParser selv, json payload)</Member>
+        <Member type="Method">private static void parse_error(MessageParser self, json payload)</Member>
+        <Member type="Method">private static void parse_info(MessageParser self, json payload)</Member>
+        <Member type="Method">private static void parse_history(MessageParser self, json payload)</Member>
+        <Member type="Method">private static void parse_message(MessageParser self, json payload)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Comment">
@@ -59,9 +57,17 @@
         <Location left="374" top="286" />
         <Size width="188" height="50" />
       </Entity>
+      <Entity type="Comment">
+        <Text>
+        </Text>
+        <Location left="817" top="434" />
+        <Size width="160" height="75" />
+      </Entity>
     </Entities>
     <Relationships>
       <Relationship type="Association" first="0" second="1">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -72,6 +78,8 @@
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="1" second="0">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -86,12 +94,16 @@
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="0" second="2">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="2" second="0">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>

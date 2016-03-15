@@ -17,12 +17,10 @@ class MessageReceiver(Thread):
         self.daemon = True
         self.client = client;
         self.connection = connection;
-        print(client);
-        print(connection);
-        # TODO: Finish initialization of MessageReceiver
-
+        
     def run(self):
         #Listne for connections
-        res = self.connection.recv(4096);
+        while True:
+            res = self.connection.recv(4096);
         
-        pass;
+        

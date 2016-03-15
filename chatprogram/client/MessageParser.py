@@ -1,35 +1,35 @@
 import json
 
+#'static' class
 class MessageParser():
     
-    def __init__(self):
-        pass;
-        
-    def parse(self, payload):
+    def parse(cls, payload):
         payload = json.loads(payload);
         if payload['response'] in self.responseTable:
             return self.responseTable[payload['response']](payload);
         else:
-            #Error
+            #Error?
             pass;
 
-    def parse_error(self, payload):
+    def parse_error(cls, payload):
         pass;
-    def parse_info(self, payload):
+    def parse_info(cls, payload):
+        parse 
         pass;
-    def parse_message(self, payload):
+    def parse_message(cls, payload):
+        return "[{}] {}: {}".format(payload["timestamp"],payload["sender"],payload["content"]);
         pass;
-    def parse_history(self, payload):
-        for i in payload["content"]:
-            self.parse(i);
+    def parse_history(cls, payload):
+        ret = "";
+        for i,v in enumerate(payload["content"]):
+            ret += cls.parse(v) + "\n";
+        ret += "-" * 15;
+        return ret;
     #Static:
     responseTable = {
         "error": parse_error,
         "info": parse_info,
         "history": parse_history,
         "message": parse_message
-        
-    # More key:values pairs are needed	
     }
     
-    # Include more methods for handling the different responses... 

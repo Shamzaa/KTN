@@ -19,12 +19,9 @@ class Client:
         self.host = host;
         self.server_port = server_port;
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.parser = MessageParser();
         self.connection.connect((self.host, self.server_port))
-        # TODO: Finish init process with necessary code
     
     def run(self):
-        # Initiate the connection to the server
         while True:
             inp = input(">> ");
             match = re.search("^\\s*([^\\s]+)(?:$|\\s(.+))", inp);
@@ -41,23 +38,14 @@ class Client:
                 pass;
                 
                 
-    def disconnect(self):
-        # TODO: Handle disconnection
-        pass
-
+    
     def receive_message(self, message):
-        # TODO: Handle incoming message
-        print(self.parser.parse(message));
-        pass
-
-    def send_payload(self, data):
-        # TODO: Handle sending of a payload
-        self.connection.send(data);
-        pass
+        print(MessageParser.parse(message));
         
-    # More methods may be needed!
-
-
+    def send_payload(self, data):
+        self.connection.send(data);
+        
+    
 if __name__ == '__main__':
     """
     This is the main method and is executed when you type "python Client.py"
@@ -67,7 +55,5 @@ if __name__ == '__main__':
     """
     client = Client('localhost', 9998);
     reqHandler = MessageReceiver(client,client.connection);
-    print("Starting thread");
     reqHandler.start();
-    print("Connecting to server!");
     client.run();    
