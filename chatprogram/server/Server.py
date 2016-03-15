@@ -10,14 +10,14 @@ must be written here (e.g. a dictionary for connected clients)
 clients = {};
 history = [];
 
-commands = "Commands:\n\tlogin <username>\nl\togout\n\tmsg <message>\n\tnames\n\thelp";
+commands = "Commands:\n\tlogin <username>\n\togout\n\tmsg <message>\n\tnames\n\thelp";
 
 class parser():
 
     def decodeReceived(self,received_string):
         received_json = json.loads(received_string);
-        if(received_json["request"] in parse_tabel):
-            return self.parse_tabel[received_json["request"]](received_json["content"]);
+        if(received_json["request"] in self.parse_tabel):
+            return self.parse_tabel[received_json["request"]](self,received_json["content"]);
             
     parse_tabel = {};
     
@@ -47,30 +47,29 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             try:
                 received_string = self.connection.recv(4096).decode("UTF-8");
                 self.decodeReceived(received_string);
-                # print("Got request: {}".format(received_string.decode("UTF-8")));
-                # TODO: Add handling of received payload from client
             except Exception as e:
                 print("Exception cought: {}\nTerminating connection!".format(e));
                 
                 break;
         # Clean up
+        self.logout();
         self.connection.close();
         
         
     # variable data is dictionary
-    def sendToUser(user, data):
+    def sendToUser(self,data):
         pass;
         if not("timestamp" in data):
-            data["timestamp"] = datetime.datetime.now().time().replace(microseconds = 0);
+            data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
             
-        connection.send(json.dumps(data).encode("ASCII"));
+        self.connection.send(json.dumps(data).encode("ASCII"));
         # data is dict
         # add server as sender
         # add timestamp
     
-
+    @classmethod
     def sendToAllUsers(cls, data):
-        data["timestamp"] = datetime.datetime.now().time().replace(microseconds = 0);
+        data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
         history.append(data);
         for k,v in clients.items():
             v.sendToUser(data);
@@ -78,8 +77,8 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
     def isLoggedIn(self):
         return self.username in clients;
         
-    def login(username):
-        if(isLoggedIn(self)):
+    def login(self,username):
+        if(self.isLoggedIn()):
             self.error("du er allerede logget inn");
             
         if(not username in clients):
@@ -94,13 +93,16 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
     
     
     def logout(self, message):
-        if(isLoggedIn(self)):
+        if(self.isLoggedIn()):
             clients.pop(self.username);
     
     def msg(self,mess):
         # ja, det er et mess
-        ClientHandler.sendToAllUsers(self.message(mess));
-        
+        if(self.isLoggedIn()):
+            ClientHandler.sendToAllUsers(self.message(mess));
+        else:
+            self.sendToUser(self.error("Du må logge in for å sende meldinger!"));
+            
     def names(self):
         self.sendToUser(self.info(clients.keys()));
     

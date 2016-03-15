@@ -22,5 +22,5 @@ class MessageReceiver(Thread):
         #Listne for connections
         while True:
             res = self.connection.recv(4096);
-        
+            self.client.receive_message(res.decode("UTF-8"));
         
