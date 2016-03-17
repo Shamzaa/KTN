@@ -129,6 +129,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "response": "error",
             "content": message,
             "sender": "Server"
+        }
             
         
         
