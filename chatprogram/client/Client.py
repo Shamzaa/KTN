@@ -48,6 +48,7 @@ class Client:
         self.e = tkinter.Entry(self.gui);
         self.e.bind("<Return>",self.inp_callback);
         self.e.pack(expand=True, fill=tkinter.X);
+        self.gui.mainloop();
         
     
         while True:
