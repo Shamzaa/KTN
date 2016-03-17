@@ -52,7 +52,8 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
                 
                 break;
         # Clean up
-        self.logout();
+        if(self.username in clients):
+            clients.pop(self.username);
         self.connection.close();
         
         
@@ -92,9 +93,12 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
     
     
-    def logout(self, message):
+    def logout(self,a):
         if(self.isLoggedIn()):
             clients.pop(self.username);
+            self.info("logget ut");
+        else:
+            self.error("du er ikke logget inn, og kan ikke logge ut");
     
     def msg(self,mess):
         # ja, det er et mess
