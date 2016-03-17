@@ -38,6 +38,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         self.connection = self.request;
         
         self.username = None;
+        self.isAdmin = False;
         
         print("New client connected!");
         
@@ -62,6 +63,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
         
         m = ("{:0>4}".format(len(json.dumps(data))) + json.dumps(data)).encode("ASCII");
+        print(m);
         self.connection.send(m);
         # data is dict
         # add server as sender
@@ -79,7 +81,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
     def login(self,username):
         if(self.isLoggedIn()):
-            self.error("du er allerede logget inn");
+            self.sendToUser(self.error("du er allerede logget inn"));
             
         if(not username in clients):
             clients[username] = self;
@@ -88,7 +90,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             self.sendToUser(self.info(welcomeMessage));
             ClientHandler.sendToAllUsers(self.info("{}  har logget in".format(username)));
         else:
-            self.error("brukernavnet er tatt");
+            self.sendToUser(self.error("brukernavnet er tatt"));
             
     def logout(self, message):
 
@@ -127,7 +129,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "response": "error",
             "content": message,
             "sender": "Server"
-        };
+            
         
         
     def info(self, message):
@@ -144,12 +146,30 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "sender": "Server"
         };
     
+    
+    #moderator
+    
+    def mod(self, message):
+        if(self.isLoggedIn):
+            self.isAdmin = message == "myNamaChef";
+            if(self.isAdmin):
+                self.sendToUser(self.info("du er nå admin"));
+        
+    def ban(self, message):
+        # shitty if statement, yolo.
+        if(message in clients and self.isAdmin and not(message == self.username)):
+            ClientHandler.sendToAllUsers(self.info("{} has been banned".format(message)));
+            clients.pop(message);
+
+        
     parse_tabel = {
         "login": login,
         "logout": logout,
         "help": help,
         "msg": msg,
-        "names": names
+        "names": names,
+        "mod": mod,
+        "ban": ban
     }
     
 
