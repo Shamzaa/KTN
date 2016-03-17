@@ -106,7 +106,10 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             self.sendToUser(self.error("Du må logge in for å sende meldinger!"));
             
     def names(self,_):
-        self.sendToUser(self.info(clients.keys()));
+        msg = "\n";
+        for i in clients.keys():
+            msg += "  " + i + "\n";
+        self.sendToUser(self.info(msg));
     
     def help(self,_):
         self.sendToUser(self.info(commands));

@@ -2,6 +2,7 @@
 import socket
 import re
 import json
+import tkinter
 from MessageReceiver import MessageReceiver
 from MessageParser import MessageParser
 
@@ -19,28 +20,46 @@ class Client:
         self.host = host;
         self.server_port = server_port;
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connection.connect((self.host, self.server_port))
-    
+        self.connection.connect((self.host, self.server_port));
+        
+    def send_message(self,inp):
+        match = re.search("^\\s*([^\\s]+)(?:$|\\s(.+))", inp);
+        if(match):
+            req = match.group(1);
+            cont = match.group(2);
+            
+            request = {
+                "request": req,
+                "content": cont
+            };
+            self.send_payload(json.dumps(request).encode("ASCII"));
+        else:
+            pass;
+    def inp_callback(self,a):
+        self.send_message(self.e.get());
+        self.e.delete(0, last=len(self.e.get()));
+        
+        
     def run(self):
+        self.gui = tkinter.Tk();
+        self.gui.geometry("450x450");
+        self.t = tkinter.Text(self.gui,state='disabled');
+        self.t.pack(expand=True, fill=tkinter.BOTH);
+        self.e = tkinter.Entry(self.gui);
+        self.e.bind("<Return>",self.inp_callback);
+        self.e.pack(expand=True, fill=tkinter.X);
+        
+    
         while True:
             inp = input(">> ");
-            match = re.search("^\\s*([^\\s]+)(?:$|\\s(.+))", inp);
-            if(match):
-                req = match.group(1);
-                cont = match.group(2);
-                
-                request = {
-                    "request": req,
-                    "content": cont
-                };
-                self.send_payload(json.dumps(request).encode("ASCII"));
-            else:
-                pass;
-                
+            self.send_message(inp);    
                 
     
     def receive_message(self, message):
-        print(MessageParser.parse(json.loads(message)));
+        self.t.configure(state="normal");
+        self.t.insert('end', MessageParser.parse(json.loads(message)) + "\n");
+        self.t.configure(state="disabled");
+        #print(MessageParser.parse(json.loads(message)));
         
     def send_payload(self, data):
         self.connection.send(data);
