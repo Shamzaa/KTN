@@ -1,0 +1,37 @@
+title help
+
+participant Client
+participant MessageParse
+participant MessageReceiver
+participant ClientHandler
+note left of Client: 
+Client sender
+JSON objekter
+end note
+
+Client->+ClientHandler: JSON object med help
+note right of ClientHandler
+dekoder JSON fil og forstår at
+klienten vil ha mulige kommandoer
+end note
+ClientHandler->ClientHandler:
+
+note right of ClientHandler:
+Returnerer en JSON fil med alle kommandoene
+brukeren har mulighet for å kjøre
+end note
+
+
+
+ClientHandler-->+MessageReceiver: response JSON
+MessageReceiver-->+Client: Response JSON
+Client->+MessageParse: parse()
+note right of MessageParse:
+Dekoder JSON og returnere
+en liste med alle kommandoene
+som en streng til klienten
+end note
+MessageParse->-Client: string
+deactivate MessageReceiver
+deactivate Client
+

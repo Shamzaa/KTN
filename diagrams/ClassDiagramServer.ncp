@@ -1,0 +1,119 @@
+<Project>
+  <Name>ktn1</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>class diagram server</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Server</Name>
+        <Access>Public</Access>
+        <Location left="79" top="42" />
+        <Size width="162" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">dictionary Clients</Member>
+        <Member type="Field">list&lt;String&gt; history</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ThreadedTCPServer</Name>
+        <Access>Public</Access>
+        <Location left="332" top="42" />
+        <Size width="162" height="103" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">private void start()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ClientHandler</Name>
+        <Access>Public</Access>
+        <Location left="179" top="331" />
+        <Size width="377" height="417" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">String ip</Member>
+        <Member type="Field">String port</Member>
+        <Member type="Field">Socket connection</Member>
+        <Member type="Field">private dictionary&lt;String, Method&gt; parse_tabel</Member>
+        <Member type="Method">public void __init__(ClientHandler self)</Member>
+        <Member type="Method">public void handle(ClientHandler self)</Member>
+        <Member type="Method">public String __str__(ClientHandler self)</Member>
+        <Member type="Method">private void disconnectUser(ClientHandler self)</Member>
+        <Member type="Method">private void sendToUser(ClientHandler self, ClientHandler receiver, dictionary data)</Member>
+        <Member type="Method">private bool isLoggedIn(ClientHandler self)</Member>
+        <Member type="Method">private void login()</Member>
+        <Member type="Method">private void logout()</Member>
+        <Member type="Method">private void login()</Member>
+        <Member type="Method">private void help(ClientHandler self)</Member>
+        <Member type="Method">private dictionary message(ClientHandler self, String message)</Member>
+        <Member type="Method">private dictionary error()</Member>
+        <Member type="Method">private dictionary info()</Member>
+        <Member type="Method">private dictionary history()</Member>
+        <Member type="Method">private static void sendToAll(Class&lt;ClientHandler&gt; cls, String data)</Member>
+        <Member type="Method">private static list&lt;ClientHandler&gt; getConnectedUsers(Class&lt;ClientHandler&gt; cls)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>init</Text>
+        <Location left="260" top="30" />
+        <Size width="50" height="50" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Creates new ClientHandler object for each new client connection</Text>
+        <Location left="376" top="183" />
+        <Size width="160" height="62" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Uses list of clients to get information about other clients. Username as lookup and clientHandler object as the content of username
+
+</Text>
+        <Location left="40" top="183" />
+        <Size width="150" height="102" />
+      </Entity>
+      <Entity type="Class">
+        <Name>parser</Name>
+        <Access>Public</Access>
+        <Location left="705" top="84" />
+        <Size width="283" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">dictionary&lt;String,Method&gt; parse_tabel</Member>
+        <Member type="Method">private void parse(parser self, String payload)</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Dependency" first="2" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>202</X>
+          <Y>306</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="1" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>349</X>
+          <Y>306</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="2" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Untitled</Name>
+    <Language>Java</Language>
+    <Entities />
+    <Relationships />
+  </ProjectItem>
+</Project>
