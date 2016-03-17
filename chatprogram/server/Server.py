@@ -63,6 +63,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
         
         m = ("{:0>4}".format(len(json.dumps(data))) + json.dumps(data)).encode("ASCII");
+        print(m);
         self.connection.send(m);
         # data is dict
         # add server as sender
@@ -125,7 +126,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "response": "error",
             "content": message,
             "sender": "Server"
-        };
+            
         
         
     def info(self, message):
@@ -153,9 +154,9 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
     def ban(self, message):
         # shitty if statement, yolo.
-        if(message in clients and self.isAdmin and not(self.username == message)):
-            clients.pop(clients[message]);
+        if(message in clients and self.isAdmin and not(message == self.username)):
             ClientHandler.sendToAllUsers(self.info("{} has been banned".format(message)));
+            clients.pop(message);
 
         
     parse_tabel = {
