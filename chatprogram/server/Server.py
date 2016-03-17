@@ -153,9 +153,9 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
     def ban(self, message):
         if(message in clients and self.isAdmin and self.isLoggedIn):
-            ClientHandler.sendToAllUsers(self.info("{} has been banned".format(message)));
-            print(message)
             clients.pop(clients[message]);
+            ClientHandler.sendToAllUsers(self.info("{} has been banned".format(message)));
+
         
     parse_tabel = {
         "login": login,
