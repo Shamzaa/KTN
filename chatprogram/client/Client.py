@@ -40,7 +40,7 @@ class Client:
                 
     
     def receive_message(self, message):
-        print(MessageParser.parse(message));
+        print(MessageParser.parse(json.loads(message)));
         
     def send_payload(self, data):
         self.connection.send(data);

@@ -5,7 +5,6 @@ class MessageParser():
     
     @classmethod
     def parse(cls, payload):
-        payload = json.loads(payload);
         if payload['response'] in cls.responseTable:
             return cls.responseTable[payload['response']](payload);
         else:

@@ -11,13 +11,7 @@ clients = {};
 history = [];
 
 commands = "\nCommands:\n\tlogin <username>\n\togout\n\tmsg <message>\n\tnames\n\thelp";
-welcomeMessage = '''
- ___    ___    ___
-/  _\  /   \  /  _\  
-| |_   | ▀ |  | |_  
-\___\  \___/  \___\ 
-
-''';
+welcomeMessage = "Welcome!";
 class parser():
     def parse(self,received_string):
         received_json = json.loads(received_string);
@@ -64,10 +58,9 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
     # variable data is dictionary
     def sendToUser(self,data):
-        pass;
         if not("timestamp" in data):
             data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
-            
+        #print("M:",json.dumps(data));
         self.connection.send(json.dumps(data).encode("ASCII"));
         # data is dict
         # add server as sender
