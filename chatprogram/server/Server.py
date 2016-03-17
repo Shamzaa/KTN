@@ -10,11 +10,16 @@ must be written here (e.g. a dictionary for connected clients)
 clients = {};
 history = [];
 
-commands = "Commands:\n\tlogin <username>\n\togout\n\tmsg <message>\n\tnames\n\thelp";
+commands = "\nCommands:\n\tlogin <username>\n\togout\n\tmsg <message>\n\tnames\n\thelp";
+welcomeMessage = '''
+ ___    ___    ___
+/  _\  /   \  /  _\  
+| |_   | ▀ |  | |_  
+\___\  \___/  \___\ 
 
+''';
 class parser():
-
-    def decodeReceived(self,received_string):
+    def parse(self,received_string):
         received_json = json.loads(received_string);
         if(received_json["request"] in self.parse_tabel):
             return self.parse_tabel[received_json["request"]](self,received_json["content"]);
@@ -46,7 +51,7 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         while True:
             try:
                 received_string = self.connection.recv(4096).decode("UTF-8");
-                self.decodeReceived(received_string);
+                self.parse(received_string);
             except Exception as e:
                 print("Exception cought: {}\nTerminating connection!".format(e));
                 
@@ -84,14 +89,12 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         if(not username in clients):
             clients[username] = self;
             self.username = username;
-            self.sendToUser(self.info("logget inn"));
+            self.sendToUser(ClientHandler.history());
+            self.sendToUser(self.info(welcomeMessage));
             ClientHandler.sendToAllUsers(self.info("{}  har logget in".format(username)));
         else:
             self.error("brukernavnet er tatt");
-        
-        
-    
-    
+            
     def logout(self, message):
         if(self.isLoggedIn()):
             clients.pop(self.username);
@@ -103,8 +106,11 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         else:
             self.sendToUser(self.error("Du må logge in for å sende meldinger!"));
             
-    def names(self,a):
+    def names(self,_):
         self.sendToUser(self.info(clients.keys()));
+    
+    def help(self,_):
+        self.sendToUser(self.info(commands));
     
     def message(self, message):
         return {
@@ -113,11 +119,8 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             "sender": self.username
         };
     
-    def help(self,a):
-        self.sendToUser(self.info(commands));
     
     def error(self, message):
-        # return error message
         return {
             "response": "error",
             "content": message,
@@ -126,14 +129,13 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         
         
     def info(self, message):
-        # 
         return {
             "response": "info",
             "content": message,
             "sender": "Server"
         };
-        
-    def history(self):
+    @classmethod
+    def history(cls):
         return {
             "response": "history",
             "content": history,
@@ -146,8 +148,6 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
         "help": help,
         "msg": msg,
         "names": names
-        
-    
     }
     
 
