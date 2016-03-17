@@ -21,6 +21,10 @@ class MessageReceiver(Thread):
     def run(self):
         #Listne for connections
         while True:
-            res = self.connection.recv(4096);
-            self.client.receive_message(res.decode("UTF-8"));
+            #Get message length
+            res = self.connection.recv(4);
+            mL = int(res);
+            #Read the message based on message length(done to prevent 2 or more messages from merging into one)
+            res2 = self.connection.recv(mL);
+            self.client.receive_message(res2.decode("UTF-8"));
         

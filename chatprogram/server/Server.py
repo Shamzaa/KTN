@@ -10,7 +10,7 @@ must be written here (e.g. a dictionary for connected clients)
 clients = {};
 history = [];
 
-commands = "\nCommands:\n\tlogin <username>\n\togout\n\tmsg <message>\n\tnames\n\thelp";
+commands = "\nCommands:\n\tlogin <username>\n\tlogout\n\tmsg <message>\n\tnames\n\thelp";
 welcomeMessage = "Welcome!";
 class parser():
     def parse(self,received_string):
@@ -60,8 +60,9 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
     def sendToUser(self,data):
         if not("timestamp" in data):
             data["timestamp"] = str(datetime.datetime.now().time().replace(microsecond = 0));
-        #print("M:",json.dumps(data));
-        self.connection.send(json.dumps(data).encode("ASCII"));
+        
+        m = ("{:0>4}".format(len(json.dumps(data))) + json.dumps(data)).encode("ASCII");
+        self.connection.send(m);
         # data is dict
         # add server as sender
         # add timestamp
@@ -91,12 +92,11 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
             
     def logout(self, message):
 
-        
         if(self.isLoggedIn()):
             clients.pop(self.username);
-            self.info("logget ut");
+            self.sendToUser(self.info("logget ut"));
         else:
-            self.error("du er ikke logget inn, og kan ikke logge ut");
+            self.sendToUser(self.error("du er ikke logget inn, og kan ikke logge ut"));
     
     def msg(self,mess):
         # ja, det er et mess
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     No alterations are necessary
     """
-    HOST, PORT = ('localhost', 9998);
+    HOST, PORT = ('0.0.0.0', 9998);
     print("Server running...2");
 
     # Set up and initiate the TCP server
