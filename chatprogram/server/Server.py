@@ -152,7 +152,8 @@ class ClientHandler(socketserver.BaseRequestHandler,parser):
                 self.sendToUser(self.info("du er nå admin"));
         
     def ban(self, message):
-        if(message in clients and self.isAdmin and self.isLoggedIn):
+        # shitty if statement, yolo.
+        if(message in clients and self.isAdmin and not(self.username == message)):
             clients.pop(clients[message]);
             ClientHandler.sendToAllUsers(self.info("{} has been banned".format(message)));
 
