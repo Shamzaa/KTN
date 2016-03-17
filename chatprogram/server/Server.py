@@ -11,7 +11,15 @@ clients = {};
 history = [];
 
 commands = "\nCommands:\n\tlogin <username>\n\tlogout\n\tmsg <message>\n\tnames\n\thelp";
-welcomeMessage = "Welcome!";
+welcomeMessage = """
+ __      __       .__                               
+/  \    /  \ ____ |  |   ____  ____   _____   ____  
+\   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ \ 
+ \        /\  ___/|  |_\  \__(  <_> )  Y Y  \  ___/ 
+  \__/\  /  \___  >____/\___  >____/|__|_|  /\___  >
+       \/       \/          \/            \/     \/ 
+
+""";
 class parser():
     def parse(self,received_string):
         received_json = json.loads(received_string);
